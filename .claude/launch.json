@@ -3,9 +3,12 @@
   "configurations": [
     {
       "name": "Flux Dev Server",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000
+      "runtimeExecutable": "/Users/himasha/.nvm/versions/node/v22.12.0/bin/node",
+      "runtimeArgs": ["/Users/himasha/Desktop/macro_cal/node_modules/next/dist/bin/next", "dev"],
+      "port": 3000,
+      "env": {
+        "PATH": "/Users/himasha/.nvm/versions/node/v22.12.0/bin:/usr/local/bin:/usr/bin:/bin"
+      }
     }
   ]
 }

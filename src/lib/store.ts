@@ -1,9 +1,12 @@
-'use client'
 import { create } from 'zustand'
 import type { UserSettings, DayLog, BodyLog } from './types'
 import { LocalDataStore } from './storage/localStorage'
 
-const db = new LocalDataStore()
+let _db: LocalDataStore | null = null
+function getDb(): LocalDataStore {
+  if (!_db) _db = new LocalDataStore()
+  return _db
+}
 
 interface FluxStore {
   settings: UserSettings | null
@@ -27,6 +30,7 @@ export const useFluxStore = create<FluxStore>((set, get) => ({
   hydrated: false,
 
   init: () => {
+    const db = getDb()
     set({
       settings: db.getSettings(),
       logs: db.getLogs(),
@@ -36,36 +40,36 @@ export const useFluxStore = create<FluxStore>((set, get) => ({
   },
 
   saveSettings: (s) => {
-    db.saveSettings(s)
+    getDb().saveSettings(s)
     set({ settings: s })
   },
 
   saveLog: (log) => {
+    const db = getDb()
     db.saveLog(log)
-    const raw = localStorage.getItem('flux:logs')
-    const logs: DayLog[] = raw ? JSON.parse(raw) : []
-    set({ logs: logs.sort((a, b) => a.date.localeCompare(b.date)) })
+    set({ logs: db.getLogs() })
   },
 
   deleteLog: (date) => {
-    db.deleteLog(date)
+    getDb().deleteLog(date)
     set((state) => ({ logs: state.logs.filter((l) => l.date !== date) }))
   },
 
   saveBodyLog: (log) => {
+    const db = getDb()
     db.saveBodyLog(log)
     set({ bodyLogs: db.getBodyLogs() })
   },
 
-  exportData: () => db.exportAll(),
+  exportData: () => getDb().exportAll(),
 
   importData: (json) => {
-    db.importAll(json)
+    getDb().importAll(json)
     get().init()
   },
 
   clearAll: () => {
-    db.clearAll()
+    getDb().clearAll()
     set({ settings: null, logs: [], bodyLogs: [], hydrated: false })
   },
 }))
