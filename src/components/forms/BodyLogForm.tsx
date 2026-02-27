@@ -122,21 +122,27 @@ export function BodyLogForm() {
       {!settings?.sex && (
         <p className="text-xs text-zinc-500">
           Set your sex in{' '}
-          <a href="/settings" className="text-amber-400 hover:underline">
+          <a href="/settings" className="text-[#4F8EF7] hover:underline">
             Settings
           </a>{' '}
           to enable Navy BF% calculation.
         </p>
       )}
 
-      {calculatedBf !== undefined ? (
-        <Card className="border-amber-400/30 bg-amber-400/5">
-          <CardContent className="py-3 px-4">
-            <p className="text-xs text-zinc-400">Calculated BF% (Navy method)</p>
-            <p className="text-2xl font-bold text-amber-400">{calculatedBf.toFixed(1)}%</p>
-          </CardContent>
-        </Card>
-      ) : (
+      {/* BF% Preview — always visible */}
+      <Card className="border-[#4F8EF7]/30 bg-[#4F8EF7]/5">
+        <CardContent className="py-3 px-4">
+          <p className="text-xs text-[#8B8BA7]">Calculated BF% (Navy method)</p>
+          <p className="text-2xl font-data font-bold text-[#4F8EF7]">
+            {calculatedBf !== undefined ? `${calculatedBf.toFixed(1)}%` : '—'}
+          </p>
+          {calculatedBf === undefined && settings?.sex && (
+            <p className="text-xs text-[#4A4A62] mt-1">Fill in measurements above to calculate</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {calculatedBf === undefined && (
         <div>
           <Label htmlFor="manual-bf">BF% (manual entry)</Label>
           <Input
@@ -153,7 +159,7 @@ export function BodyLogForm() {
 
       <Button
         onClick={handleSave}
-        className="w-full bg-amber-400 text-zinc-950 hover:bg-amber-300"
+        className="w-full bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90"
       >
         Save measurement
       </Button>

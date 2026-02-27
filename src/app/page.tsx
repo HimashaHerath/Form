@@ -19,7 +19,7 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="text-amber-400 text-2xl font-bold animate-pulse">Flux</div>
+      <div className="text-[#4F8EF7] text-2xl font-bold animate-pulse">FORM</div>
     </div>
   )
 }

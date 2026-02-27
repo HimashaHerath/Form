@@ -74,7 +74,7 @@ export default function OnboardingPage() {
       <div className="w-full mb-8">
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm text-zinc-400">Step {step} of {TOTAL_STEPS}</span>
-          <span className="text-lg font-bold text-amber-400">Flux</span>
+          <span className="text-lg font-bold text-[#4F8EF7]">FORM</span>
         </div>
         <Progress value={(step / TOTAL_STEPS) * 100} className="h-1.5" />
       </div>
@@ -93,7 +93,7 @@ export default function OnboardingPage() {
                 className={cn(
                   'cursor-pointer transition-all',
                   units === u
-                    ? 'border-amber-400 bg-amber-400/10'
+                    ? 'border-[#4F8EF7] bg-[#4F8EF7]/10'
                     : 'border-zinc-700 hover:border-zinc-500'
                 )}
               >
@@ -149,7 +149,7 @@ export default function OnboardingPage() {
                     variant={sex === s ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setSex(sex === s ? undefined : s)}
-                    className={cn(sex === s && 'bg-amber-400 text-zinc-950 hover:bg-amber-300')}
+                    className={cn(sex === s && 'bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90')}
                   >
                     {s.charAt(0).toUpperCase() + s.slice(1)}
                   </Button>
@@ -189,7 +189,7 @@ export default function OnboardingPage() {
                 className={cn(
                   'cursor-pointer transition-all',
                   tdeeWindow === opt.value
-                    ? 'border-amber-400 bg-amber-400/10'
+                    ? 'border-[#4F8EF7] bg-[#4F8EF7]/10'
                     : 'border-zinc-700 hover:border-zinc-500'
                 )}
               >
@@ -199,7 +199,7 @@ export default function OnboardingPage() {
                     <p className="text-sm text-zinc-400">{opt.sub}</p>
                   </div>
                   {tdeeWindow === opt.value && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400 flex-shrink-0" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#4F8EF7] flex-shrink-0" />
                   )}
                 </CardContent>
               </Card>
@@ -224,7 +224,7 @@ export default function OnboardingPage() {
                 className={cn(
                   'cursor-pointer transition-all',
                   targetDeficit === opt.value
-                    ? 'border-amber-400 bg-amber-400/10'
+                    ? 'border-[#4F8EF7] bg-[#4F8EF7]/10'
                     : 'border-zinc-700 hover:border-zinc-500'
                 )}
               >
@@ -234,7 +234,7 @@ export default function OnboardingPage() {
                     <p className="text-sm text-zinc-400">{opt.sub}</p>
                   </div>
                   {targetDeficit === opt.value && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400 flex-shrink-0" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#4F8EF7] flex-shrink-0" />
                   )}
                 </CardContent>
               </Card>
@@ -257,14 +257,14 @@ export default function OnboardingPage() {
           <Button
             onClick={() => setStep(step + 1)}
             disabled={!canProceed()}
-            className="flex-1 bg-amber-400 text-zinc-950 hover:bg-amber-300 disabled:opacity-50"
+            className="flex-1 bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90 disabled:opacity-50"
           >
             Continue
           </Button>
         ) : (
           <Button
             onClick={handleFinish}
-            className="flex-1 bg-amber-400 text-zinc-950 hover:bg-amber-300"
+            className="flex-1 bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90"
           >
             Get started
           </Button>

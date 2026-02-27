@@ -28,22 +28,22 @@ export function BfChart({ data }: BfChartProps) {
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#2A2A38" />
         <XAxis
           dataKey="date"
           tickFormatter={(d) => format(parseISO(d), 'M/d')}
-          tick={{ fontSize: 11, fill: '#71717a' }}
+          tick={{ fontSize: 11, fill: '#8B8BA7', fontFamily: 'var(--font-mono)' }}
         />
         <YAxis
-          tick={{ fontSize: 11, fill: '#71717a' }}
+          tick={{ fontSize: 11, fill: '#8B8BA7', fontFamily: 'var(--font-mono)' }}
           unit="%"
           domain={['auto', 'auto']}
           width={40}
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: '#18181b',
-            border: '1px solid #3f3f46',
+            backgroundColor: '#111118',
+            border: '1px solid #2A2A38',
             borderRadius: 8,
             fontSize: 12,
           }}
@@ -53,9 +53,9 @@ export function BfChart({ data }: BfChartProps) {
         <Line
           type="monotone"
           dataKey="bfPercent"
-          stroke="#fbbf24"
+          stroke="#4F8EF7"
           strokeWidth={2}
-          dot={{ r: 3, fill: '#fbbf24' }}
+          dot={{ r: 3, fill: '#4F8EF7' }}
           connectNulls
         />
       </LineChart>

@@ -31,7 +31,7 @@ export function DailyLogForm({ date, compact, onSaved }: DailyLogFormProps) {
       weight: weight ? Number(weight) : undefined,
       calories: calories ? Number(calories) : undefined,
     })
-    toast.success('Logged!')
+    toast.success('Logged. Keep it up.')
     onSaved?.()
   }
 
@@ -45,6 +45,7 @@ export function DailyLogForm({ date, compact, onSaved }: DailyLogFormProps) {
             placeholder={`Weight (${settings?.units ?? 'lbs'})`}
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
+            className="bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
           />
         </div>
         <div className="flex-1">
@@ -53,11 +54,12 @@ export function DailyLogForm({ date, compact, onSaved }: DailyLogFormProps) {
             placeholder="Calories"
             value={calories}
             onChange={(e) => setCalories(e.target.value)}
+            className="bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
           />
         </div>
         <Button
           onClick={handleSave}
-          className="bg-amber-400 text-zinc-950 hover:bg-amber-300 shrink-0"
+          className="bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90 shrink-0"
         >
           Log
         </Button>
@@ -76,7 +78,7 @@ export function DailyLogForm({ date, compact, onSaved }: DailyLogFormProps) {
           value={weight}
           onChange={(e) => setWeight(e.target.value)}
           placeholder="178.5"
-          className="mt-1"
+          className="mt-1 bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
         />
       </div>
       <div>
@@ -87,12 +89,12 @@ export function DailyLogForm({ date, compact, onSaved }: DailyLogFormProps) {
           value={calories}
           onChange={(e) => setCalories(e.target.value)}
           placeholder="2000"
-          className="mt-1"
+          className="mt-1 bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
         />
       </div>
       <Button
         onClick={handleSave}
-        className="w-full bg-amber-400 text-zinc-950 hover:bg-amber-300"
+        className="w-full bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90"
       >
         Save
       </Button>
