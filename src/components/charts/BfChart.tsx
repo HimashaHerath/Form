@@ -48,7 +48,7 @@ export function BfChart({ data }: BfChartProps) {
             fontSize: 12,
           }}
           labelFormatter={(d) => format(parseISO(d as string), 'MMM d, yyyy')}
-          formatter={(value: number) => [`${value.toFixed(1)}%`, 'Body Fat']}
+          formatter={(value: number | undefined) => [value != null ? `${value.toFixed(1)}%` : '—', 'Body Fat']}
         />
         <Line
           type="monotone"
