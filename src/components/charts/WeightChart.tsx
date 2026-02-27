@@ -41,8 +41,9 @@ export function WeightChart({ data, units }: WeightChartProps) {
             fontSize: 12,
           }}
           labelFormatter={(d) => format(parseISO(d as string), 'MMM d')}
-          formatter={(value: number | null, name: string) => [
-            value !== null ? `${value} ${units}` : '—',
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          formatter={(value: any, name: string | undefined) => [
+            value != null ? `${value} ${units}` : '—',
             name === 'weight' ? 'Weight' : '7-day avg',
           ]}
         />
