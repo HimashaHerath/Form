@@ -5,6 +5,7 @@ import { Navbar } from './Navbar'
 import { MobileTopBar } from './MobileTopBar'
 import { FAB } from './FAB'
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
+import { useFluxStore } from '@/lib/store'
 
 const PAGE_TITLES: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -18,10 +19,14 @@ const PAGE_TITLES: Record<string, string> = {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const user = useFluxStore((s) => s.user)
   const isAuthPage = pathname.startsWith('/auth')
   const isOnboarding = pathname.startsWith('/onboarding')
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+  const authEnabled = supabaseUrl.startsWith('http')
+  const hideShell = authEnabled && !user
 
-  if (isAuthPage || isOnboarding) {
+  if (isAuthPage || isOnboarding || hideShell) {
     return <>{children}</>
   }
 

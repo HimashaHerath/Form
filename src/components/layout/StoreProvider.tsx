@@ -1,6 +1,6 @@
 'use client'
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useFluxStore } from '@/lib/store'
 import { createClient } from '@/lib/supabase/client'
 import { SupabaseDataStore } from '@/lib/storage/supabase'
@@ -8,12 +8,14 @@ import { SupabaseDataStore } from '@/lib/storage/supabase'
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const { init, setUser } = useFluxStore()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
     if (!supabaseUrl.startsWith('http')) return
 
     const supabase = createClient()
+    const isAuthRoute = pathname.startsWith('/auth')
 
     // Initialize with the current session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -23,10 +25,13 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           console.error('[StoreProvider] init failed:', err)
         })
       } else {
-        console.warn('[StoreProvider] No active session found')
+        setUser(null)
+        if (!isAuthRoute) router.replace('/auth')
       }
     }).catch((err) => {
       console.error('[StoreProvider] getSession failed:', err)
+      setUser(null)
+      if (!isAuthRoute) router.replace('/auth')
     })
 
     // Keep auth state in sync
@@ -40,12 +45,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         })
       } else if (event === 'SIGNED_OUT') {
         setUser(null)
-        router.push('/auth')
+        if (!isAuthRoute) router.replace('/auth')
       }
     })
 
     return () => subscription.unsubscribe()
-  }, [init, setUser, router])
+  }, [init, pathname, setUser, router])
 
   return <>{children}</>
 }
