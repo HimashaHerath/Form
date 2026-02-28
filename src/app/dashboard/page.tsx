@@ -29,7 +29,7 @@ function calcStreak(logs: { date: string; weight?: number; calories?: number }[]
 
 export default function DashboardPage() {
   const { settings, logs, hydrated } = useFluxStore()
-  const { currentTDEE, recommendedIntake, goalDate, currentWeight, weightChartData, weekSummaries } = useTdee()
+  const { currentTDEE, recommendedIntake, goalDate, currentWeight, weightChartData, weekSummaries, tdeeSource } = useTdee()
   const [editingToday, setEditingToday] = useState(false)
 
   if (!hydrated) return <DashboardSkeleton />
@@ -102,7 +102,7 @@ export default function DashboardPage() {
         <StatCard
           label="Current TDEE"
           value={currentTDEE ? `${fmt(currentTDEE)}` : '—'}
-          sub="kcal/day"
+          sub={tdeeSource === 'formula' ? 'kcal/day (estimated)' : tdeeSource === 'blended' ? 'kcal/day (calibrating)' : 'kcal/day'}
           highlight
           tooltip="Your estimated daily calorie burn based on logged weight and intake data"
         />
@@ -130,9 +130,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Confidence badge */}
-      {currentTDEE && (
+      {tdeeSource && (
         <div className="flex items-center gap-2">
-          <ConfidenceBadge weeksOfData={weeksOfData} />
+          <ConfidenceBadge tdeeSource={tdeeSource} />
           <span className="text-xs text-[#8B8BA7]">{weeksOfData} week{weeksOfData !== 1 ? 's' : ''} of data</span>
         </div>
       )}

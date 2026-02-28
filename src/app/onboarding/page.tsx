@@ -11,7 +11,15 @@ import { Card, CardContent } from '@/components/ui/card'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 
-const TOTAL_STEPS = 4
+const TOTAL_STEPS = 5
+
+const ACTIVITY_OPTIONS = [
+  { multiplier: 1.2, label: 'Sedentary', sub: 'Desk job, little movement' },
+  { multiplier: 1.375, label: 'Lightly active', sub: 'Light exercise 1–3 days/week' },
+  { multiplier: 1.55, label: 'Moderately active', sub: 'Moderate exercise 3–5 days/week' },
+  { multiplier: 1.725, label: 'Very active', sub: 'Hard exercise 6–7 days/week' },
+  { multiplier: 1.9, label: 'Extremely active', sub: 'Athlete / physical job + training' },
+]
 
 const DEFICIT_OPTIONS = [
   { value: -750, label: 'Aggressive loss', sub: '~1.5 lb/week' },
@@ -37,6 +45,8 @@ export default function OnboardingPage() {
   const [goalWeight, setGoalWeight] = useState('')
   const [sex, setSex] = useState<'male' | 'female' | undefined>(undefined)
   const [height, setHeight] = useState('')
+  const [age, setAge] = useState('')
+  const [activityMultiplier, setActivityMultiplier] = useState<number | undefined>(undefined)
   const [tdeeWindow, setTdeeWindow] = useState(4)
   const [targetDeficit, setTargetDeficit] = useState(-500)
 
@@ -51,6 +61,9 @@ export default function OnboardingPage() {
         Number(goalWeight) > 0
       )
     }
+    if (step === 3) {
+      return age !== '' && !isNaN(Number(age)) && Number(age) > 0 && activityMultiplier !== undefined
+    }
     return true
   }
 
@@ -64,6 +77,8 @@ export default function OnboardingPage() {
       targetDeficit,
       sex: sex ?? undefined,
       height: height ? Number(height) : undefined,
+      age: age ? Number(age) : undefined,
+      activityMultiplier,
     }
     saveSettings(settings)
     router.push('/dashboard')
@@ -176,6 +191,55 @@ export default function OnboardingPage() {
       {step === 3 && (
         <div className="w-full space-y-4">
           <div>
+            <h2 className="text-2xl font-bold">About you</h2>
+            <p className="text-sm text-zinc-400 mt-1">Used to estimate your starting calorie target</p>
+          </div>
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="age">Age</Label>
+              <Input
+                id="age"
+                type="number"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                placeholder="25"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>Activity level</Label>
+              <div className="space-y-2 mt-2">
+                {ACTIVITY_OPTIONS.map((opt) => (
+                  <Card
+                    key={opt.multiplier}
+                    onClick={() => setActivityMultiplier(opt.multiplier)}
+                    className={cn(
+                      'cursor-pointer transition-all',
+                      activityMultiplier === opt.multiplier
+                        ? 'border-[#4F8EF7] bg-[#4F8EF7]/10'
+                        : 'border-zinc-700 hover:border-zinc-500'
+                    )}
+                  >
+                    <CardContent className="flex items-center justify-between py-4 px-4">
+                      <div>
+                        <p className="font-medium">{opt.label}</p>
+                        <p className="text-sm text-zinc-400">{opt.sub}</p>
+                      </div>
+                      {activityMultiplier === opt.multiplier && (
+                        <div className="w-2.5 h-2.5 rounded-full bg-[#4F8EF7] flex-shrink-0" />
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {step === 4 && (
+        <div className="w-full space-y-4">
+          <div>
             <h2 className="text-2xl font-bold">TDEE averaging window</h2>
             <p className="text-sm text-zinc-400 mt-1">
               How many weeks to average your calorie burn over. Longer windows are more stable but slower to reflect changes.
@@ -208,7 +272,7 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {step === 4 && (
+      {step === 5 && (
         <div className="w-full space-y-4">
           <div>
             <h2 className="text-2xl font-bold">Your goal rate</h2>

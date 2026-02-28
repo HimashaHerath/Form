@@ -1,14 +1,14 @@
 'use client'
 import { useMemo } from 'react'
 import { useFluxStore } from '@/lib/store'
-import { buildWeekSummaries, calcGoalDate } from '@/lib/tdee'
+import { buildWeekSummaries, calcGoalDate, calcEstimatedTDEE, getEffectiveTDEE } from '@/lib/tdee'
 import { format, subDays, parseISO } from 'date-fns'
 
 export function useTdee() {
   const { settings, logs } = useFluxStore()
 
   return useMemo(() => {
-    if (!settings || logs.length === 0) {
+    if (!settings) {
       return {
         weekSummaries: [],
         currentTDEE: null,
@@ -16,14 +16,36 @@ export function useTdee() {
         goalDate: null,
         currentWeight: null,
         weightChartData: [] as { date: string; weight: number | null; movingAvg: number | null }[],
+        estimatedTDEE: null as number | null,
+        tdeeSource: null as 'formula' | 'blended' | 'adaptive' | null,
       }
     }
 
-    const weekSummaries = buildWeekSummaries(logs, settings)
+    const weekSummaries = logs.length > 0 ? buildWeekSummaries(logs, settings) : []
     const validWeeks = weekSummaries.filter((w) => w.smoothedTDEE > 0)
     const latestWeek = validWeeks.at(-1)
-    const currentTDEE = latestWeek?.smoothedTDEE ?? null
-    const recommendedIntake = latestWeek?.recommendedIntake ?? null
+    const adaptiveTDEE = latestWeek?.smoothedTDEE ?? null
+    const estimatedTDEE = calcEstimatedTDEE(settings)
+    const weeksOfData = validWeeks.length
+
+    const effectiveTDEE = getEffectiveTDEE(adaptiveTDEE, estimatedTDEE, weeksOfData)
+    const currentTDEE = effectiveTDEE
+
+    // Determine TDEE source
+    let tdeeSource: 'formula' | 'blended' | 'adaptive' | null = null
+    if (effectiveTDEE !== null) {
+      if (!adaptiveTDEE || weeksOfData < 2) {
+        tdeeSource = estimatedTDEE ? 'formula' : null
+      } else if (weeksOfData >= 8) {
+        tdeeSource = 'adaptive'
+      } else {
+        tdeeSource = 'blended'
+      }
+    }
+
+    const recommendedIntake = effectiveTDEE
+      ? effectiveTDEE + settings.targetDeficit
+      : null
 
     const recentWeightLogs = logs.filter((l) => l.weight !== undefined).slice(-7)
     const currentWeight = recentWeightLogs.length
@@ -53,6 +75,6 @@ export function useTdee() {
       }
     }
 
-    return { weekSummaries, currentTDEE, recommendedIntake, goalDate, currentWeight, weightChartData }
+    return { weekSummaries, currentTDEE, recommendedIntake, goalDate, currentWeight, weightChartData, estimatedTDEE, tdeeSource }
   }, [settings, logs])
 }

@@ -10,6 +10,8 @@ export interface UserSettings {
   targetDeficit: number       // kcal/day below TDEE (negative = surplus)
   sex?: Sex                   // optional, for Navy BF% formula
   height?: number             // cm, optional, for Navy BF% formula
+  age?: number                // years, for Mifflin-St Jeor formula
+  activityMultiplier?: number // 1.2 | 1.375 | 1.55 | 1.725 | 1.9
 }
 
 export interface DayLog {

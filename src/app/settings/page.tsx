@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useFluxStore } from '@/lib/store'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -34,11 +34,13 @@ export default function SettingsPage() {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  if (!hydrated) return null
-  if (!settings) {
-    router.replace('/onboarding')
-    return null
-  }
+  useEffect(() => {
+    if (hydrated && !settings) {
+      router.replace('/onboarding')
+    }
+  }, [hydrated, settings, router])
+
+  if (!hydrated || !settings) return null
 
   const handleExport = async () => {
     const json = await exportData()
@@ -147,6 +149,52 @@ export default function SettingsPage() {
                   </SelectContent>
                 </Select>
               </div>
+
+              <Separator className="bg-[#2A2A38]" />
+
+              {/* Age */}
+              <div>
+                <Label htmlFor="age">Age</Label>
+                <Input
+                  id="age"
+                  type="number"
+                  defaultValue={settings.age ?? ''}
+                  onBlur={(e) => {
+                    const val = Number(e.target.value)
+                    if (val > 0) {
+                      saveSettings({ ...settings, age: val })
+                      toast.success('Saved')
+                    }
+                  }}
+                  placeholder="25"
+                  className="mt-1"
+                />
+              </div>
+
+              {/* Activity level */}
+              <div>
+                <Label>Activity level</Label>
+                <Select
+                  value={settings.activityMultiplier != null ? String(settings.activityMultiplier) : ''}
+                  onValueChange={(v) => {
+                    saveSettings({ ...settings, activityMultiplier: Number(v) })
+                    toast.success('Saved')
+                  }}
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select activity level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1.2">Sedentary</SelectItem>
+                    <SelectItem value="1.375">Lightly active</SelectItem>
+                    <SelectItem value="1.55">Moderately active</SelectItem>
+                    <SelectItem value="1.725">Very active</SelectItem>
+                    <SelectItem value="1.9">Extremely active</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Separator className="bg-[#2A2A38]" />
 
               {/* Deficit */}
               <div>

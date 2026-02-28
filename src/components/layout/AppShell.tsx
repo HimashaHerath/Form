@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import { Navbar } from './Navbar'
 import { MobileTopBar } from './MobileTopBar'
 import { FAB } from './FAB'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
 
 const PAGE_TITLES: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -50,6 +50,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Mobile nav sheet */}
       <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
         <SheetContent side="left" className="w-[260px] bg-[#0D0D16] border-[#2A2A38] p-0">
+          <SheetTitle className="sr-only">Navigation menu</SheetTitle>
           <Navbar onNavigate={() => setMobileNavOpen(false)} />
         </SheetContent>
       </Sheet>
