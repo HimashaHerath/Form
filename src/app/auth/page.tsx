@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,10 +7,26 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { Mail, ArrowRight } from 'lucide-react'
 
+const COOLDOWN_SECONDS = 60
+
+function isRateLimitError(message: string): boolean {
+  const lower = message.toLowerCase()
+  return lower.includes('rate limit') || lower.includes('too many requests')
+}
+
 export default function AuthPage() {
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [cooldown, setCooldown] = useState(0)
+
+  useEffect(() => {
+    if (cooldown <= 0) return
+    const timer = setInterval(() => setCooldown((c) => c - 1), 1000)
+    return () => clearInterval(timer)
+  }, [cooldown])
+
+  const startCooldown = useCallback(() => setCooldown(COOLDOWN_SECONDS), [])
 
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault()
@@ -24,8 +40,14 @@ export default function AuthPage() {
     })
     setLoading(false)
     if (error) {
-      toast.error(error.message)
+      if (isRateLimitError(error.message)) {
+        startCooldown()
+        toast.error('Please wait a minute before requesting another link.')
+      } else {
+        toast.error(error.message)
+      }
     } else {
+      startCooldown()
       setSent(true)
     }
   }
@@ -64,6 +86,11 @@ export default function AuthPage() {
           >
             Use a different email
           </Button>
+          {cooldown > 0 && (
+            <p className="text-xs text-[#4A4A62]">
+              Resend available in {cooldown}s
+            </p>
+          )}
         </div>
       ) : (
         <form onSubmit={handleSignIn} className="space-y-4">
@@ -84,9 +111,11 @@ export default function AuthPage() {
           <Button
             type="submit"
             className="w-full bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90 font-semibold h-11 gap-2"
-            disabled={loading}
+            disabled={loading || cooldown > 0}
           >
-            {loading ? 'Sending...' : (
+            {loading ? 'Sending...' : cooldown > 0 ? (
+              `Resend in ${cooldown}s`
+            ) : (
               <>Send magic link <ArrowRight className="h-4 w-4" /></>
             )}
           </Button>
