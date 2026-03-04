@@ -42,7 +42,7 @@ export default function AuthPage() {
     if (error) {
       if (isRateLimitError(error.message)) {
         startCooldown()
-        toast.error('Please wait a minute before requesting another link.')
+        toast.error('Too many requests. Please wait a moment and try again.')
       } else {
         toast.error(error.message)
       }
@@ -82,7 +82,7 @@ export default function AuthPage() {
             variant="ghost"
             size="sm"
             className="text-[#8B8BA7] hover:text-[#F0F0F8]"
-            onClick={() => setSent(false)}
+            onClick={() => { setSent(false); setCooldown(0) }}
           >
             Use a different email
           </Button>

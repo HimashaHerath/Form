@@ -43,14 +43,21 @@ export const useFluxStore = create<FluxStore>((set, get) => ({
     set({ settings, logs, bodyLogs, hydrated: true })
   },
 
-  // Optimistic: update state immediately, persist in background
+  // Optimistic: update state immediately, rollback on failure
   saveSettings: async (s) => {
+    const prev = get().settings
     set({ settings: s })
-    await _db!.saveSettings(s)
+    try {
+      await _db!.saveSettings(s)
+    } catch (e) {
+      set({ settings: prev })
+      throw e
+    }
   },
 
-  // Optimistic: splice log into state immediately, then persist
+  // Optimistic: splice log into state immediately, rollback on failure
   saveLog: async (log) => {
+    const prev = get().logs
     set((state) => {
       const logs = [...state.logs]
       const idx = logs.findIndex((l) => l.date === log.date)
@@ -59,17 +66,29 @@ export const useFluxStore = create<FluxStore>((set, get) => ({
       logs.sort((a, b) => a.date.localeCompare(b.date))
       return { logs }
     })
-    await _db!.saveLog(log)
+    try {
+      await _db!.saveLog(log)
+    } catch (e) {
+      set({ logs: prev })
+      throw e
+    }
   },
 
-  // Optimistic: remove from state immediately, then persist
+  // Optimistic: remove from state immediately, rollback on failure
   deleteLog: async (date) => {
+    const prev = get().logs
     set((state) => ({ logs: state.logs.filter((l) => l.date !== date) }))
-    await _db!.deleteLog(date)
+    try {
+      await _db!.deleteLog(date)
+    } catch (e) {
+      set({ logs: prev })
+      throw e
+    }
   },
 
-  // Optimistic: splice body log into state immediately, then persist
+  // Optimistic: splice body log into state immediately, rollback on failure
   saveBodyLog: async (log) => {
+    const prev = get().bodyLogs
     set((state) => {
       const bodyLogs = [...state.bodyLogs]
       const idx = bodyLogs.findIndex((l) => l.date === log.date)
@@ -77,7 +96,12 @@ export const useFluxStore = create<FluxStore>((set, get) => ({
       else bodyLogs.push(log)
       return { bodyLogs }
     })
-    await _db!.saveBodyLog(log)
+    try {
+      await _db!.saveBodyLog(log)
+    } catch (e) {
+      set({ bodyLogs: prev })
+      throw e
+    }
   },
 
   exportData: () => _db!.exportAll(),
