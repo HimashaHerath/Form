@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { DM_Serif_Display, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
@@ -18,9 +18,29 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
 })
 
+export const viewport: Viewport = {
+  themeColor: '#0A0A0F',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
+
 export const metadata: Metadata = {
   title: 'FORM',
   description: 'Know your body. Feed it right.',
+  applicationName: 'FORM',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'FORM',
+  },
+  icons: {
+    apple: '/icons/icon-180x180.png',
+  },
+  formatDetection: {
+    telephone: false,
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
