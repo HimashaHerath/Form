@@ -73,7 +73,7 @@ export function WeightChart({ data, units, showTabs }: WeightChartProps) {
               const v = value as number | null
               return [
                 v != null ? `${name === 'tdee' ? Math.round(v).toLocaleString() + ' kcal' : v + ' ' + units}` : '—',
-                name === 'weight' ? 'Weight' : name === 'movingAvg' ? '7-day avg' : 'TDEE',
+                name === 'weight' ? 'Weight' : name === 'movingAvg' ? '7-day avg' : 'Daily Burn',
               ]
             }}
           />

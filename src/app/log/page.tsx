@@ -204,7 +204,7 @@ export default function LogPage() {
           {/* Week TDEE footer */}
           {weekSummary?.smoothedTDEE ? (
             <div className="px-4 py-3 border-t border-[#2A2A38] flex justify-end">
-              <span className="text-xs text-[#8B8BA7]">Week TDEE: </span>
+              <span className="text-xs text-[#8B8BA7]">Weekly Burn:</span>
               <span className="text-xs font-data text-[#4F8EF7] ml-1">
                 {Math.round(weekSummary.smoothedTDEE).toLocaleString()} kcal
               </span>
@@ -313,7 +313,7 @@ export default function LogPage() {
         {/* Week TDEE on mobile */}
         {weekSummary?.smoothedTDEE ? (
           <div className="flex justify-end pt-1">
-            <span className="text-xs text-[#8B8BA7]">Week TDEE: </span>
+            <span className="text-xs text-[#8B8BA7]">Weekly Burn:</span>
             <span className="text-xs font-data text-[#4F8EF7] ml-1">
               {Math.round(weekSummary.smoothedTDEE).toLocaleString()} kcal
             </span>

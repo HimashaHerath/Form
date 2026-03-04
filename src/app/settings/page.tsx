@@ -143,9 +143,9 @@ export default function SettingsPage() {
                 />
               </div>
 
-              {/* TDEE window */}
+              {/* Calorie burn averaging window */}
               <div>
-                <Label>TDEE averaging window</Label>
+                <Label>Calorie burn averaging window</Label>
                 <Select
                   value={String(settings.tdeeWindow)}
                   onValueChange={(v) => {
@@ -375,7 +375,7 @@ export default function SettingsPage() {
           <Card className="border-[#2A2A38]">
             <CardContent className="py-3 px-4">
               <p className="text-xs text-[#4A4A62]">
-                <span className="text-[#4F8EF7] font-medium">FORM</span> — TDEE Tracker
+                <span className="text-[#4F8EF7] font-medium">FORM</span> — Calorie Tracker
               </p>
               <p className="text-xs text-[#4A4A62] mt-0.5">
                 Data synced to your account via Supabase.

@@ -101,18 +101,18 @@ export default function DashboardPage() {
       {/* Zone 1: Hero Stats — 4x1 row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard
-          label="Current TDEE"
+          label="Daily Burn"
           value={currentTDEE ? `${fmt(currentTDEE)}` : '—'}
           sub={tdeeSource === 'formula' ? 'kcal/day (estimated)' : tdeeSource === 'blended' ? 'kcal/day (calibrating)' : 'kcal/day'}
           highlight
-          tooltip="Your estimated daily calorie burn based on logged weight and intake data"
+          tooltip="How many calories your body burns per day, calculated from your logged weight and intake"
         />
         <StatCard
           label="Eat Today"
           value={recommendedIntake ? `${fmt(recommendedIntake)}` : '—'}
           sub={
             settings
-              ? `TDEE ${settings.targetDeficit > 0 ? '+' : ''}${settings.targetDeficit} kcal`
+              ? `Burn ${settings.targetDeficit > 0 ? '+' : ''}${settings.targetDeficit} kcal`
               : undefined
           }
           primary
@@ -219,7 +219,7 @@ export default function DashboardPage() {
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-[#8B8BA7] uppercase tracking-wide">
-            Weight & TDEE Trend
+            Weight & Calorie Burn Trend
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -234,7 +234,7 @@ export default function DashboardPage() {
         <Card className="border-[#2A2A38] bg-[#111118]/50">
           <CardContent className="py-6 text-center">
             <p className="text-sm text-[#8B8BA7]">
-              Log your first week to see TDEE appear here.
+              Log your first week to see your daily calorie burn appear here.
             </p>
             <p className="text-xs text-[#4A4A62] mt-1">
               The more you log, the more accurate it gets.

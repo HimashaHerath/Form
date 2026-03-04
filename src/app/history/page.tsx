@@ -127,7 +127,7 @@ export default function HistoryPage() {
       ) : (
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-[#8B8BA7] uppercase tracking-wide">TDEE History</CardTitle>
+            <CardTitle className="text-sm font-medium text-[#8B8BA7] uppercase tracking-wide">Weekly Calorie Burn</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -137,7 +137,7 @@ export default function HistoryPage() {
                     <th className="text-left text-xs uppercase tracking-wide text-[#8B8BA7] px-4 py-3 font-medium">Week</th>
                     <th className="text-right text-xs uppercase tracking-wide text-[#8B8BA7] px-4 py-3 font-medium">Avg Weight</th>
                     <th className="text-right text-xs uppercase tracking-wide text-[#8B8BA7] px-4 py-3 font-medium">Avg Cals</th>
-                    <th className="text-right text-xs uppercase tracking-wide text-[#8B8BA7] px-4 py-3 font-medium">TDEE</th>
+                    <th className="text-right text-xs uppercase tracking-wide text-[#8B8BA7] px-4 py-3 font-medium">Daily Burn</th>
                     <th className="text-center text-xs uppercase tracking-wide text-[#8B8BA7] px-4 py-3 font-medium w-[60px]">Trend</th>
                     <th className="text-center text-xs uppercase tracking-wide text-[#8B8BA7] px-4 py-3 font-medium hidden lg:table-cell w-[100px]">Sparkline</th>
                   </tr>

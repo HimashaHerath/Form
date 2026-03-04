@@ -240,7 +240,7 @@ export default function OnboardingPage() {
       {step === 4 && (
         <div className="w-full space-y-4">
           <div>
-            <h2 className="text-2xl font-bold">TDEE averaging window</h2>
+            <h2 className="text-2xl font-bold">Averaging window</h2>
             <p className="text-sm text-[#8B8BA7] mt-1">
               How many weeks to average your calorie burn over. Longer windows are more stable but slower to reflect changes.
             </p>

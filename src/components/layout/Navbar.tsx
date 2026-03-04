@@ -22,7 +22,7 @@ export function Navbar({ onNavigate }: { onNavigate?: () => void }) {
         <h1 className="text-xl font-display tracking-tight text-[#F0F0F8]">
           FORM<span className="text-[#4F8EF7]">.</span>
         </h1>
-        <p className="text-xs text-[#8B8BA7]">TDEE Tracker</p>
+        <p className="text-xs text-[#8B8BA7]">Calorie Tracker</p>
       </div>
       {navItems.map(({ href, label, icon: Icon }) => (
         <Link

@@ -26,9 +26,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         {/* Floating Demo Stat Cards */}
         <div className="relative z-10 space-y-4 p-8">
           <div className="bg-[#111118] border border-[#2A2A38] rounded-xl p-4 shadow-xl transform rotate-[-2deg] hover:rotate-0 transition-transform">
-            <p className="text-xs uppercase tracking-wide text-[#8B8BA7]">CURRENT TDEE</p>
+            <p className="text-xs uppercase tracking-wide text-[#8B8BA7]">DAILY CALORIE BURN</p>
             <p className="text-3xl font-data tabular-nums text-[#4F8EF7] mt-1">2,847</p>
-            <p className="text-xs text-[#4A4A62] mt-1">kcal/day</p>
+            <p className="text-xs text-[#4A4A62] mt-1">kcal/day — from real data</p>
           </div>
           <div className="bg-[#111118] border border-[#2A2A38] rounded-xl p-4 shadow-xl transform rotate-[1deg] hover:rotate-0 transition-transform ml-8">
             <p className="text-xs uppercase tracking-wide text-[#8B8BA7]">LOGGING STREAK</p>
