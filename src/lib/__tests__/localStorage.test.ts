@@ -10,11 +10,11 @@ describe('LocalDataStore', () => {
   })
 
   describe('settings', () => {
-    it('returns null when no settings saved', () => {
-      expect(store.getSettings()).toBeNull()
+    it('returns null when no settings saved', async () => {
+      expect(await store.getSettings()).toBeNull()
     })
 
-    it('saves and retrieves settings', () => {
+    it('saves and retrieves settings', async () => {
       const settings = {
         startDate: '2026-01-01',
         startWeight: 180,
@@ -23,60 +23,60 @@ describe('LocalDataStore', () => {
         tdeeWindow: 4,
         targetDeficit: -500,
       }
-      store.saveSettings(settings)
-      expect(store.getSettings()).toEqual(settings)
+      await store.saveSettings(settings)
+      expect(await store.getSettings()).toEqual(settings)
     })
   })
 
   describe('logs', () => {
-    it('returns empty array when no logs', () => {
-      expect(store.getLogs()).toEqual([])
+    it('returns empty array when no logs', async () => {
+      expect(await store.getLogs()).toEqual([])
     })
 
-    it('saves and retrieves a log', () => {
+    it('saves and retrieves a log', async () => {
       const log = { date: '2026-01-15', weight: 178.5, calories: 2000 }
-      store.saveLog(log)
-      expect(store.getLogs()).toContainEqual(log)
+      await store.saveLog(log)
+      expect(await store.getLogs()).toContainEqual(log)
     })
 
-    it('upserts log for same date', () => {
-      store.saveLog({ date: '2026-01-15', weight: 178, calories: 2000 })
-      store.saveLog({ date: '2026-01-15', weight: 179, calories: 2100 })
-      const logs = store.getLogs()
+    it('upserts log for same date', async () => {
+      await store.saveLog({ date: '2026-01-15', weight: 178, calories: 2000 })
+      await store.saveLog({ date: '2026-01-15', weight: 179, calories: 2100 })
+      const logs = await store.getLogs()
       expect(logs).toHaveLength(1)
       expect(logs[0].weight).toBe(179)
     })
 
-    it('deletes a log by date', () => {
-      store.saveLog({ date: '2026-01-15', weight: 178, calories: 2000 })
-      store.deleteLog('2026-01-15')
-      expect(store.getLogs()).toHaveLength(0)
+    it('deletes a log by date', async () => {
+      await store.saveLog({ date: '2026-01-15', weight: 178, calories: 2000 })
+      await store.deleteLog('2026-01-15')
+      expect(await store.getLogs()).toHaveLength(0)
     })
 
-    it('filters logs by date range', () => {
-      store.saveLog({ date: '2026-01-10', weight: 180, calories: 2000 })
-      store.saveLog({ date: '2026-01-15', weight: 179, calories: 1950 })
-      store.saveLog({ date: '2026-01-20', weight: 178, calories: 2100 })
-      const filtered = store.getLogs('2026-01-12', '2026-01-18')
+    it('filters logs by date range', async () => {
+      await store.saveLog({ date: '2026-01-10', weight: 180, calories: 2000 })
+      await store.saveLog({ date: '2026-01-15', weight: 179, calories: 1950 })
+      await store.saveLog({ date: '2026-01-20', weight: 178, calories: 2100 })
+      const filtered = await store.getLogs('2026-01-12', '2026-01-18')
       expect(filtered).toHaveLength(1)
       expect(filtered[0].date).toBe('2026-01-15')
     })
   })
 
   describe('bodyLogs', () => {
-    it('returns empty array when no body logs', () => {
-      expect(store.getBodyLogs()).toEqual([])
+    it('returns empty array when no body logs', async () => {
+      expect(await store.getBodyLogs()).toEqual([])
     })
 
-    it('saves and retrieves a body log', () => {
+    it('saves and retrieves a body log', async () => {
       const log = { date: '2026-01-15', weight: 178, bfPercent: 18.5 }
-      store.saveBodyLog(log)
-      expect(store.getBodyLogs()).toContainEqual(log)
+      await store.saveBodyLog(log)
+      expect(await store.getBodyLogs()).toContainEqual(log)
     })
   })
 
   describe('export/import', () => {
-    it('round-trips all data through export/import', () => {
+    it('round-trips all data through export/import', async () => {
       const settings = {
         startDate: '2026-01-01',
         startWeight: 180,
@@ -85,16 +85,16 @@ describe('LocalDataStore', () => {
         tdeeWindow: 4,
         targetDeficit: -500,
       }
-      store.saveSettings(settings)
-      store.saveLog({ date: '2026-01-15', weight: 178, calories: 2000 })
+      await store.saveSettings(settings)
+      await store.saveLog({ date: '2026-01-15', weight: 178, calories: 2000 })
 
-      const json = store.exportAll()
+      const json = await store.exportAll()
       localStorage.clear()
       const store2 = new LocalDataStore()
-      store2.importAll(json)
+      await store2.importAll(json)
 
-      expect(store2.getSettings()).toEqual(settings)
-      expect(store2.getLogs()).toHaveLength(1)
+      expect(await store2.getSettings()).toEqual(settings)
+      expect(await store2.getLogs()).toHaveLength(1)
     })
   })
 })

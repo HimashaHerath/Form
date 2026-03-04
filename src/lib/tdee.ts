@@ -25,12 +25,15 @@ export function calcGoalDate(
   tdee: number,
   intake: number,
   units: Units
-): Date {
+): Date | null {
   const calPerUnit = units === 'lbs' ? CAL_PER_LB : CAL_PER_KG
   const dailyDeficit = tdee - intake
+  if (dailyDeficit === 0) return null
   const weightToLose = currentWeight - goalWeight
   const daysToGoal = (weightToLose * calPerUnit) / dailyDeficit
-  return new Date(Date.now() + Math.abs(daysToGoal) * 24 * 60 * 60 * 1000)
+  if (!isFinite(daysToGoal) || daysToGoal <= 0) return null
+  const result = new Date(Date.now() + daysToGoal * 24 * 60 * 60 * 1000)
+  return isFinite(result.getTime()) ? result : null
 }
 
 /**

@@ -45,14 +45,20 @@ describe('calcGoalDate', () => {
   it('returns a date in the future when losing weight', () => {
     const now = new Date()
     const result = calcGoalDate(180, 170, 2500, 2000, 'lbs')
-    expect(result.getTime()).toBeGreaterThan(now.getTime())
+    expect(result).not.toBeNull()
+    expect(result!.getTime()).toBeGreaterThan(now.getTime())
   })
 
   it('calculates ~70 days to lose 10 lbs at 500 kcal/day deficit', () => {
     const now = new Date()
     const result = calcGoalDate(180, 170, 2500, 2000, 'lbs')
-    const daysDiff = (result.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    expect(result).not.toBeNull()
+    const daysDiff = (result!.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
     expect(daysDiff).toBeCloseTo(70, 0)
+  })
+
+  it('returns null when deficit is zero (maintenance)', () => {
+    expect(calcGoalDate(180, 170, 2500, 2500, 'lbs')).toBeNull()
   })
 })
 

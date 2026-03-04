@@ -70,8 +70,8 @@ export default function SettingsPage() {
     e.target.value = ''
   }
 
-  const handleClear = () => {
-    clearAll()
+  const handleClear = async () => {
+    await clearAll()
     router.push('/onboarding')
   }
 
