@@ -33,6 +33,8 @@ export default function SettingsPage() {
   const { settings, saveSettings, exportData, importData, clearAll, signOut, hydrated } = useFluxStore()
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [exporting, setExporting] = useState(false)
+  const [importing, setImporting] = useState(false)
 
   useEffect(() => {
     if (hydrated && !settings) {
@@ -43,27 +45,37 @@ export default function SettingsPage() {
   if (!hydrated || !settings) return null
 
   const handleExport = async () => {
-    const json = await exportData()
-    const blob = new Blob([json], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `form-export-${format(new Date(), 'yyyy-MM-dd')}.json`
-    a.click()
-    URL.revokeObjectURL(url)
-    toast.success('Exported!')
+    setExporting(true)
+    try {
+      const json = await exportData()
+      const blob = new Blob([json], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `form-export-${format(new Date(), 'yyyy-MM-dd')}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+      toast.success('Exported!')
+    } catch {
+      toast.error('Export failed')
+    } finally {
+      setExporting(false)
+    }
   }
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+    setImporting(true)
     const reader = new FileReader()
-    reader.onload = (ev) => {
+    reader.onload = async (ev) => {
       try {
-        importData(ev.target!.result as string)
+        await importData(ev.target!.result as string)
         toast.success('Data imported successfully!')
       } catch {
-        toast.error('Invalid file format')
+        toast.error('Invalid file format — please check the file and try again')
+      } finally {
+        setImporting(false)
       }
     }
     reader.readAsText(file)
@@ -80,7 +92,7 @@ export default function SettingsPage() {
       <h1 className="text-2xl font-bold">Settings</h1>
 
       {/* Two-column desktop layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left column: Personal settings */}
         <div className="space-y-5">
           <Card>
@@ -123,6 +135,8 @@ export default function SettingsPage() {
                     if (val > 0) {
                       saveSettings({ ...settings, goalWeight: val })
                       toast.success('Saved')
+                    } else if (e.target.value !== '') {
+                      toast.error('Goal weight must be a positive number')
                     }
                   }}
                   className="mt-1"
@@ -164,6 +178,8 @@ export default function SettingsPage() {
                     if (val > 0) {
                       saveSettings({ ...settings, age: val })
                       toast.success('Saved')
+                    } else if (e.target.value !== '') {
+                      toast.error('Age must be a positive number')
                     }
                   }}
                   placeholder="25"
@@ -261,6 +277,8 @@ export default function SettingsPage() {
                       if (val > 0) {
                         saveSettings({ ...settings, height: val })
                         toast.success('Saved')
+                      } else if (e.target.value !== '') {
+                        toast.error('Height must be a positive number')
                       }
                     }}
                     placeholder="175"
@@ -280,19 +298,21 @@ export default function SettingsPage() {
               <Button
                 variant="outline"
                 onClick={handleExport}
+                disabled={exporting}
                 className="w-full gap-2 justify-start"
               >
                 <Download className="h-4 w-4" />
-                Export all data as JSON
+                {exporting ? 'Exporting...' : 'Export all data as JSON'}
               </Button>
 
               <Button
                 variant="outline"
                 onClick={() => fileInputRef.current?.click()}
+                disabled={importing}
                 className="w-full gap-2 justify-start"
               >
                 <Upload className="h-4 w-4" />
-                Import from JSON
+                {importing ? 'Importing...' : 'Import from JSON'}
               </Button>
               <input
                 ref={fileInputRef}

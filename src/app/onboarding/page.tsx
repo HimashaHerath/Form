@@ -88,7 +88,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex flex-col items-center justify-center p-6 max-w-md mx-auto">
       <div className="w-full mb-8">
         <div className="flex justify-between items-center mb-3">
-          <span className="text-sm text-zinc-400">Step {step} of {TOTAL_STEPS}</span>
+          <span className="text-sm text-[#8B8BA7]">Step {step} of {TOTAL_STEPS}</span>
           <span className="text-lg font-bold text-[#4F8EF7]">FORM</span>
         </div>
         <Progress value={(step / TOTAL_STEPS) * 100} className="h-1.5" />
@@ -98,7 +98,7 @@ export default function OnboardingPage() {
         <div className="w-full space-y-4">
           <div>
             <h2 className="text-2xl font-bold">Choose your units</h2>
-            <p className="text-sm text-zinc-400 mt-1">You can change this later in settings</p>
+            <p className="text-sm text-[#8B8BA7] mt-1">You can change this later in settings</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {(['lbs', 'kg'] as Units[]).map((u) => (
@@ -109,12 +109,12 @@ export default function OnboardingPage() {
                   'cursor-pointer transition-all',
                   units === u
                     ? 'border-[#4F8EF7] bg-[#4F8EF7]/10'
-                    : 'border-zinc-700 hover:border-zinc-500'
+                    : 'border-[#2A2A38] hover:border-zinc-500'
                 )}
               >
                 <CardContent className="flex flex-col items-center py-8">
                   <span className="text-3xl font-bold">{u}</span>
-                  <span className="text-sm text-zinc-400 mt-1">
+                  <span className="text-sm text-[#8B8BA7] mt-1">
                     {u === 'lbs' ? 'Imperial' : 'Metric'}
                   </span>
                 </CardContent>
@@ -128,7 +128,7 @@ export default function OnboardingPage() {
         <div className="w-full space-y-4">
           <div>
             <h2 className="text-2xl font-bold">Your weight &amp; goal</h2>
-            <p className="text-sm text-zinc-400 mt-1">We use this to calculate your goal date</p>
+            <p className="text-sm text-[#8B8BA7] mt-1">We use this to calculate your goal date</p>
           </div>
           <div className="space-y-3">
             <div>
@@ -156,7 +156,7 @@ export default function OnboardingPage() {
               />
             </div>
             <div>
-              <Label>Sex <span className="text-zinc-500">(optional — for BF% calculation)</span></Label>
+              <Label>Sex <span className="text-[#8B8BA7]">(optional — for BF% calculation)</span></Label>
               <div className="flex gap-2 mt-1">
                 {(['male', 'female'] as const).map((s) => (
                   <Button
@@ -192,7 +192,7 @@ export default function OnboardingPage() {
         <div className="w-full space-y-4">
           <div>
             <h2 className="text-2xl font-bold">About you</h2>
-            <p className="text-sm text-zinc-400 mt-1">Used to estimate your starting calorie target</p>
+            <p className="text-sm text-[#8B8BA7] mt-1">Used to estimate your starting calorie target</p>
           </div>
           <div className="space-y-3">
             <div>
@@ -217,13 +217,13 @@ export default function OnboardingPage() {
                       'cursor-pointer transition-all',
                       activityMultiplier === opt.multiplier
                         ? 'border-[#4F8EF7] bg-[#4F8EF7]/10'
-                        : 'border-zinc-700 hover:border-zinc-500'
+                        : 'border-[#2A2A38] hover:border-zinc-500'
                     )}
                   >
                     <CardContent className="flex items-center justify-between py-4 px-4">
                       <div>
                         <p className="font-medium">{opt.label}</p>
-                        <p className="text-sm text-zinc-400">{opt.sub}</p>
+                        <p className="text-sm text-[#8B8BA7]">{opt.sub}</p>
                       </div>
                       {activityMultiplier === opt.multiplier && (
                         <div className="w-2.5 h-2.5 rounded-full bg-[#4F8EF7] flex-shrink-0" />
@@ -241,7 +241,7 @@ export default function OnboardingPage() {
         <div className="w-full space-y-4">
           <div>
             <h2 className="text-2xl font-bold">TDEE averaging window</h2>
-            <p className="text-sm text-zinc-400 mt-1">
+            <p className="text-sm text-[#8B8BA7] mt-1">
               How many weeks to average your calorie burn over. Longer windows are more stable but slower to reflect changes.
             </p>
           </div>
@@ -254,13 +254,13 @@ export default function OnboardingPage() {
                   'cursor-pointer transition-all',
                   tdeeWindow === opt.value
                     ? 'border-[#4F8EF7] bg-[#4F8EF7]/10'
-                    : 'border-zinc-700 hover:border-zinc-500'
+                    : 'border-[#2A2A38] hover:border-zinc-500'
                 )}
               >
                 <CardContent className="flex items-center justify-between py-4 px-4">
                   <div>
                     <p className="font-medium">{opt.label}</p>
-                    <p className="text-sm text-zinc-400">{opt.sub}</p>
+                    <p className="text-sm text-[#8B8BA7]">{opt.sub}</p>
                   </div>
                   {tdeeWindow === opt.value && (
                     <div className="w-2.5 h-2.5 rounded-full bg-[#4F8EF7] flex-shrink-0" />
@@ -276,7 +276,7 @@ export default function OnboardingPage() {
         <div className="w-full space-y-4">
           <div>
             <h2 className="text-2xl font-bold">Your goal rate</h2>
-            <p className="text-sm text-zinc-400 mt-1">
+            <p className="text-sm text-[#8B8BA7] mt-1">
               How aggressively do you want to hit your target weight?
             </p>
           </div>
@@ -289,13 +289,13 @@ export default function OnboardingPage() {
                   'cursor-pointer transition-all',
                   targetDeficit === opt.value
                     ? 'border-[#4F8EF7] bg-[#4F8EF7]/10'
-                    : 'border-zinc-700 hover:border-zinc-500'
+                    : 'border-[#2A2A38] hover:border-zinc-500'
                 )}
               >
                 <CardContent className="flex items-center justify-between py-4 px-4">
                   <div>
                     <p className="font-medium">{opt.label}</p>
-                    <p className="text-sm text-zinc-400">{opt.sub}</p>
+                    <p className="text-sm text-[#8B8BA7]">{opt.sub}</p>
                   </div>
                   {targetDeficit === opt.value && (
                     <div className="w-2.5 h-2.5 rounded-full bg-[#4F8EF7] flex-shrink-0" />
@@ -321,7 +321,7 @@ export default function OnboardingPage() {
           <Button
             onClick={() => setStep(step + 1)}
             disabled={!canProceed()}
-            className="flex-1 bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90 disabled:opacity-50"
+            className="flex-1 bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90"
           >
             Continue
           </Button>

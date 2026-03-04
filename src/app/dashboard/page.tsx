@@ -3,6 +3,7 @@ import { useFluxStore } from '@/lib/store'
 import { useTdee } from '@/hooks/useTdee'
 import { StatCard } from '@/components/layout/StatCard'
 import { WeightChart } from '@/components/charts/WeightChart'
+import { ChartErrorBoundary } from '@/components/charts/ChartErrorBoundary'
 import { DailyLogForm } from '@/components/forms/DailyLogForm'
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -222,7 +223,9 @@ export default function DashboardPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <WeightChart data={chartDataWithTdee} units={settings?.units ?? 'lbs'} showTabs />
+          <ChartErrorBoundary>
+            <WeightChart data={chartDataWithTdee} units={settings?.units ?? 'lbs'} showTabs />
+          </ChartErrorBoundary>
         </CardContent>
       </Card>
 

@@ -20,49 +20,73 @@ export function DailyLogForm({ date, compact, onSaved }: DailyLogFormProps) {
 
   const [weight, setWeight] = useState(existing?.weight?.toString() ?? '')
   const [calories, setCalories] = useState(existing?.calories?.toString() ?? '')
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!weight && !calories) {
-      toast.error('Enter at least weight or calories')
+      setError('Enter at least weight or calories')
       return
     }
-    saveLog({
-      date: today,
-      weight: weight ? Number(weight) : undefined,
-      calories: calories ? Number(calories) : undefined,
-    })
-    toast.success('Logged. Keep it up.')
-    onSaved?.()
+    if (weight && (isNaN(Number(weight)) || Number(weight) <= 0)) {
+      setError('Weight must be a positive number')
+      return
+    }
+    if (calories && (isNaN(Number(calories)) || Number(calories) < 0)) {
+      setError('Calories must be a valid number')
+      return
+    }
+    setError('')
+    setSaving(true)
+    try {
+      await saveLog({
+        date: today,
+        weight: weight ? Number(weight) : undefined,
+        calories: calories ? Number(calories) : undefined,
+      })
+      toast.success('Logged. Keep it up.')
+      onSaved?.()
+    } catch {
+      toast.error('Failed to save — please try again')
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (compact) {
     return (
-      <div className="flex gap-2 items-end">
-        <div className="flex-1">
-          <Input
-            type="number"
-            step="0.1"
-            placeholder={`Weight (${settings?.units ?? 'lbs'})`}
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            className="bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
-          />
+      <div className="space-y-2">
+        <div className="flex gap-2 items-end">
+          <div className="flex-1">
+            <Input
+              type="number"
+              step="0.1"
+              min="0"
+              placeholder={`Weight (${settings?.units ?? 'lbs'})`}
+              value={weight}
+              onChange={(e) => { setWeight(e.target.value); setError('') }}
+              className="bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
+            />
+          </div>
+          <div className="flex-1">
+            <Input
+              type="number"
+              min="0"
+              placeholder="Calories"
+              value={calories}
+              onChange={(e) => { setCalories(e.target.value); setError('') }}
+              className="bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
+            />
+          </div>
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90 shrink-0"
+          >
+            {saving ? 'Saving...' : 'Log'}
+          </Button>
         </div>
-        <div className="flex-1">
-          <Input
-            type="number"
-            placeholder="Calories"
-            value={calories}
-            onChange={(e) => setCalories(e.target.value)}
-            className="bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
-          />
-        </div>
-        <Button
-          onClick={handleSave}
-          className="bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90 shrink-0"
-        >
-          Log
-        </Button>
+        {error && <p className="text-xs text-[#EF4444]">{error}</p>}
       </div>
     )
   }
@@ -75,8 +99,9 @@ export function DailyLogForm({ date, compact, onSaved }: DailyLogFormProps) {
           id="log-weight"
           type="number"
           step="0.1"
+          min="0"
           value={weight}
-          onChange={(e) => setWeight(e.target.value)}
+          onChange={(e) => { setWeight(e.target.value); setError('') }}
           placeholder="178.5"
           className="mt-1 bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
         />
@@ -86,17 +111,20 @@ export function DailyLogForm({ date, compact, onSaved }: DailyLogFormProps) {
         <Input
           id="log-calories"
           type="number"
+          min="0"
           value={calories}
-          onChange={(e) => setCalories(e.target.value)}
+          onChange={(e) => { setCalories(e.target.value); setError('') }}
           placeholder="2000"
           className="mt-1 bg-[#1A1A24] border-[#2A2A38] focus:border-[#4F8EF7]"
         />
       </div>
+      {error && <p className="text-xs text-[#EF4444]">{error}</p>}
       <Button
         onClick={handleSave}
+        disabled={saving}
         className="w-full bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90"
       >
-        Save
+        {saving ? 'Saving...' : 'Save'}
       </Button>
     </div>
   )

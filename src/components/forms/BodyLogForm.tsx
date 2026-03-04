@@ -19,6 +19,7 @@ export function BodyLogForm() {
   const [waist, setWaist] = useState('')
   const [hips, setHips] = useState('')
   const [manualBf, setManualBf] = useState('')
+  const [saving, setSaving] = useState(false)
 
   const canCalcNavy =
     neck && waist && settings?.height && settings?.sex &&
@@ -42,20 +43,27 @@ export function BodyLogForm() {
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!weight) {
       toast.error('Weight is required')
       return
     }
-    saveBodyLog({
-      date: today,
-      weight: Number(weight),
-      neck: neck ? Number(neck) : undefined,
-      waist: waist ? Number(waist) : undefined,
-      hips: hips ? Number(hips) : undefined,
-      bfPercent: calculatedBf ?? (manualBf ? Number(manualBf) : undefined),
-    })
-    toast.success('Body measurement saved!')
+    setSaving(true)
+    try {
+      await saveBodyLog({
+        date: today,
+        weight: Number(weight),
+        neck: neck ? Number(neck) : undefined,
+        waist: waist ? Number(waist) : undefined,
+        hips: hips ? Number(hips) : undefined,
+        bfPercent: calculatedBf ?? (manualBf ? Number(manualBf) : undefined),
+      })
+      toast.success('Body measurement saved!')
+    } catch {
+      toast.error('Failed to save — please try again')
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -73,10 +81,10 @@ export function BodyLogForm() {
         />
       </div>
 
-      <div className="space-y-1">
-        <p className="text-sm font-medium text-zinc-300">Measurements (cm) — optional</p>
-        <p className="text-xs text-zinc-500">Used to calculate body fat % via the Navy formula</p>
-      </div>
+      <fieldset className="space-y-1">
+        <legend className="text-sm font-medium text-[#F0F0F8]">Measurements (cm) — optional</legend>
+        <p className="text-xs text-[#8B8BA7]">Used to calculate body fat % via the Navy formula</p>
+      </fieldset>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -120,7 +128,7 @@ export function BodyLogForm() {
       </div>
 
       {!settings?.sex && (
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-[#8B8BA7]">
           Set your sex in{' '}
           <a href="/settings" className="text-[#4F8EF7] hover:underline">
             Settings
@@ -159,9 +167,10 @@ export function BodyLogForm() {
 
       <Button
         onClick={handleSave}
+        disabled={saving}
         className="w-full bg-[#4F8EF7] text-white hover:bg-[#4F8EF7]/90"
       >
-        Save measurement
+        {saving ? 'Saving...' : 'Save measurement'}
       </Button>
     </div>
   )

@@ -20,7 +20,7 @@ export function StatCard({ label, value, sub, highlight, primary, tooltip, delta
       primary && 'bg-[#4F8EF7] border-[#4F8EF7]',
       highlight && !primary && 'border-[#4F8EF7]/50',
     )}>
-      <CardContent className="p-4">
+      <CardContent className="p-3 md:p-4">
         <div className="flex items-center gap-1">
           <p className={cn(
             'text-xs uppercase tracking-wide',

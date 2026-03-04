@@ -244,21 +244,23 @@ export default function LogPage() {
                         </Button>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-2">
                       <Input
                         type="number"
                         step="0.1"
+                        min="0"
                         value={editWeight}
                         onChange={(e) => setEditWeight(e.target.value)}
                         placeholder={`Weight (${settings?.units ?? 'lbs'})`}
-                        className="h-8 text-sm font-data bg-[#1A1A24] border-[#2A2A38]"
+                        className="text-sm font-data bg-[#1A1A24] border-[#2A2A38]"
                       />
                       <Input
                         type="number"
+                        min="0"
                         value={editCalories}
                         onChange={(e) => setEditCalories(e.target.value)}
                         placeholder="Calories"
-                        className="h-8 text-sm font-data bg-[#1A1A24] border-[#2A2A38]"
+                        className="text-sm font-data bg-[#1A1A24] border-[#2A2A38]"
                       />
                     </div>
                   </div>
@@ -289,8 +291,8 @@ export default function LogPage() {
                           </Button>
                         </>
                       ) : (
-                        <Button variant="ghost" size="sm" onClick={() => startEditing(d.date)} className="text-[#4F8EF7] text-xs h-7">
-                          <Plus className="h-3 w-3 mr-1" /> Log
+                        <Button variant="ghost" size="sm" onClick={() => startEditing(d.date)} className="text-[#4F8EF7] text-xs h-9 px-3">
+                          <Plus className="h-3.5 w-3.5 mr-1" /> Log
                         </Button>
                       )}
                     </div>
@@ -300,6 +302,13 @@ export default function LogPage() {
             </Card>
           )
         })}
+
+        {/* Empty state when all days are future */}
+        {weekDays.every((d) => d.isFuture) && (
+          <div className="text-center py-8 text-sm text-[#8B8BA7]">
+            No data for this week yet
+          </div>
+        )}
 
         {/* Week TDEE on mobile */}
         {weekSummary?.smoothedTDEE ? (
